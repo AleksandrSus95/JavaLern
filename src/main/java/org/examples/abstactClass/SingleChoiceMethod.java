@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class SingleChoiceMethod extends AbstractQuest{
     @Override
-    public boolean check(Answer asnswer) {
+    public boolean check(Answer answer) {
         return new Random().nextBoolean();
     }
 }
