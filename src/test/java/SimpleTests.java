@@ -7,14 +7,15 @@ import org.examples.cloningClass.CloningClass;
 import org.examples.genericClass.ExampleGeneric;
 import org.examples.innerClass.Student;
 import org.examples.innerClass.TeacherLogic;
+import org.examples.optionalClass.Order;
+import org.examples.optionalClass.OrderAction;
+import org.examples.optionalClass.Pair;
 import org.examples.recordClass.RecordClass;
 import org.examples.staticExample.SomeCLass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -143,7 +144,7 @@ public class SimpleTests {
 
     @Test
     @DisplayName("Пример работы с Generic классом")
-    public void exampleGeneric(){
+    public void exampleGeneric() {
         ExampleGeneric<Integer> testInt = new ExampleGeneric<>();
         testInt.setValue(1);
         int v1 = testInt.getValue();
@@ -164,7 +165,7 @@ public class SimpleTests {
         defaultObj.setValue(null);
         try {
             out.println(defaultObj);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             //ignored
         }
         out.println(defaultObj.getValue());
@@ -172,10 +173,49 @@ public class SimpleTests {
 
     @Test
     @DisplayName("Пример использования record класса")
-    public void exampleUsingRecordClass(){
+    public void exampleUsingRecordClass() {
         RecordClass record = new RecordClass("Test name", new Random().nextInt());
         System.out.println(record.name());
         System.out.println(record.id());
         System.out.println(record);
     }
+
+    @Test
+    @DisplayName("Примеры Optional")
+    public void exampleUseOptional() {
+        Optional<String> optional = Optional.empty();
+    }
+
+    @Test
+    @DisplayName("Задание со Stepic Pair - дженерик класс")
+    public void taskPairGeneric() {
+        Pair<Integer, String> pair = Pair.of(1, "hello");
+        Integer i = pair.getFirst();
+        String s = pair.getSecond();
+
+        Pair<Integer, String> pair2 = Pair.of(1, "hello");
+        boolean mustBeTrue = pair.equals(pair2);
+        boolean mustAlsoBeforeBeTrue = pair.hashCode() == pair2.hashCode();
+
+        out.println(mustBeTrue);
+        out.println(mustAlsoBeforeBeTrue);
+    }
+
+    @Test
+    @DisplayName("Пример работы с оболочкой Optional")
+    public void optionalUseExample() {
+        List<Order> list = new ArrayList<>();
+        list.add(new Order(123, "ExampleOrderName - 00"));
+        for (int i = 0; i < 10; i++) {
+            list.add(new Order(new Random().nextInt(), "ExampleOrderName - " + i));
+        }
+        out.println(OrderAction.findById(list, 123));
+        Optional<Order> orderOptional = OrderAction.findByIdOptional(list, 123);
+        orderOptional.ifPresent(out::println);
+        out.println(orderOptional.get());
+        out.println(orderOptional.isEmpty());
+        out.println(orderOptional.isPresent());
+    }
+
+
 }
