@@ -1,3 +1,4 @@
+import jdk.jfr.Description;
 import org.examples.abstactClass.AbstractQuest;
 import org.examples.abstactClass.TestAction;
 import org.examples.abstactClass.TestGenerator;
@@ -15,11 +16,11 @@ import org.examples.staticExample.SomeCLass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.XMLFormatter;
 
 import static java.lang.System.out;
 
@@ -181,12 +182,6 @@ public class SimpleTests {
     }
 
     @Test
-    @DisplayName("Примеры Optional")
-    public void exampleUseOptional() {
-        Optional<String> optional = Optional.empty();
-    }
-
-    @Test
     @DisplayName("Задание со Stepic Pair - дженерик класс")
     public void taskPairGeneric() {
         Pair<Integer, String> pair = Pair.of(1, "hello");
@@ -217,5 +212,28 @@ public class SimpleTests {
         out.println(orderOptional.isPresent());
     }
 
-
+    @Test
+    @DisplayName("Тест переводчика из inStream в String")
+    @Description("Метод, который зачитает данные из InputStream и преобразует их в строку, используя заданную кодировку.")
+    public void readInStreamToString() {
+        byte[] byteArr = {48, 49, 50, 51};
+        interface ReaderAsString {
+            String readAsString(InputStream inputStream, Charset charset) throws IOException;
+        }
+        ReaderAsString reader = (InputStream inputStream, Charset charset) -> {
+            InputStreamReader newReader = new InputStreamReader(inputStream, charset);
+            StringWriter outputStream = new StringWriter();
+            int readSymbol;
+            while ((readSymbol = newReader.read()) != -1) {
+                outputStream.write(readSymbol);
+            }
+            return outputStream.toString();
+        };
+        InputStream stream = new ByteArrayInputStream(byteArr);
+        try {
+            out.println(reader.readAsString(stream, Charset.forName("ASCII")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
