@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.System.in;
 import static java.lang.System.out;
 
 public class SimpleTests {
@@ -236,4 +237,30 @@ public class SimpleTests {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    @DisplayName("Считает сумму всех встреченных в тексте вещественных чисел с точностью до шестого знака после запятой")
+    public void stepicTask(){
+        interface CalcSum {
+            void calcSum();
+        }
+        CalcSum calcSum = () -> {
+            Scanner scanner = new Scanner(in);
+            scanner.useLocale(Locale.ENGLISH);
+            double doubleD;
+            double sum = 0.0;
+            while (scanner.hasNext()){
+                if(scanner.hasNextDouble()){
+                    doubleD = scanner.nextDouble();
+                    sum += doubleD;
+                }else {
+                    scanner.next();
+                }
+            }
+            out.printf(Locale.ENGLISH, "%.6f", sum);
+        };
+        calcSum.calcSum();
+    }
+
+
 }
