@@ -12,7 +12,7 @@ public class Department {
 
     private final int id;
     private final int parent;
-    private final String name;
+    private String name;
     private Set<Department> child = new HashSet<>();
 
     public int getId() {
@@ -25,6 +25,10 @@ public class Department {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
     }
 
     @Override
