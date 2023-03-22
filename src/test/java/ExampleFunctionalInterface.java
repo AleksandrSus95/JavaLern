@@ -10,6 +10,7 @@ import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BinaryOperator;
@@ -151,20 +152,20 @@ public class ExampleFunctionalInterface {
             "Предназначен для создания новых объектов. Метод get() единственный в ин-\n" +
             "терфейсе.")
     public void supplierExampleOne() {
-        Supplier<Department> supplier = () -> new Department(1,2,"testName");
+        Supplier<Department> supplier = () -> new Department(1, 2, "testName");
         System.out.println(supplier.get());
         Supplier<int[]> supplier1 = () -> new int[10];
         int[] test = supplier1.get();
-        for(int i = 0; i < test.length; i++){
+        for (int i = 0; i < test.length; i++) {
             test[i] = 1;
         }
         Arrays.stream(test).forEach(System.out::print);
         // Пример Supplier с фабрикой массивов
-        interface ExampleSupplier{
+        interface ExampleSupplier {
             Supplier<int[]> buildArray(int size);
         }
         ExampleSupplier exampleSupplier = (size) -> {
-            final int length = size > 0 ? size: 1;
+            final int length = size > 0 ? size : 1;
             return () -> new int[length];
         };
         int[] array = exampleSupplier.buildArray(10).get();
@@ -176,7 +177,7 @@ public class ExampleFunctionalInterface {
         }
 
         RouletteExample rouletteExample = (yourNumber) -> {
-            if(yourNumber < 0 || yourNumber > 7) {
+            if (yourNumber < 0 || yourNumber > 7) {
                 System.out.println("Number should be 0< and <7");
                 return;
             }
@@ -201,22 +202,78 @@ public class ExampleFunctionalInterface {
             "терфейсе.")
     public void supplierExampleTwo() {
         interface ExampleTime {
-             static Supplier<String> buildTime(String timePattern){
-                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
-                 return () -> timeFormatter.format(LocalDateTime.now());
-             }
+            static Supplier<String> buildTime(String timePattern) {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
+                return () -> timeFormatter.format(LocalDateTime.now());
+            }
 
-             static Supplier<String> plus(float a, float b){
-                 BigDecimal decimal = new BigDecimal(a);
-                 BigDecimal decimal1 = new BigDecimal(b);
-                 BigDecimal res = decimal.add(decimal1, MathContext.DECIMAL32);
-                 return () -> res.toEngineeringString();
-             }
+            static Supplier<String> plus(float a, float b) {
+                BigDecimal decimal = new BigDecimal(a);
+                BigDecimal decimal1 = new BigDecimal(b);
+                BigDecimal res = decimal.add(decimal1, MathContext.DECIMAL32);
+                return () -> res.toEngineeringString();
+            }
         }
 
         Supplier<String> supplierNumber = ExampleTime.plus(1.123450989f, 2.000001f);
         System.out.println("res= " + supplierNumber.get());
         Supplier<String> supplierTime = ExampleTime.buildTime("yyyy-MM-dd HH:mm:ss");
         System.out.println("time= " + supplierTime.get());
+    }
+
+    @Test
+    @DisplayName("Пример использования интерфейса Comparator")
+    @Description("Реализация интерфейса Comparator<T>\n" +
+            "представляет возможность его использования для сортировки наборов объек-\n" +
+            "тов конкретного типа по правилам, определенным для этого типа. Контракт\n" +
+            "интерфейса подразумевает реализацию метода int compare(T ob1, T ob2), при-\n" +
+            "нимающего в качестве параметров два объекта, для которых должно быть\n" +
+            "определено возвращаемое целое значение, знак которого и определяет правило\n" +
+            "сортировки.")
+    public void exampleComparator() {
+        Comparator<String> comparator = (s1, s2) -> s2.length() - s1.length();
+        String str = "and java course epam the rose lion wolf hero green white red white";
+        Arrays.stream(str.split("\\s")).sorted(comparator).forEach(s -> System.out.printf("%s ", s));
+        System.out.println();
+        Arrays.stream(str.split("\\s")).sorted((s1, s2) -> s1.length() - s2.length())
+                .forEach(s -> System.out.printf("%s ", s));
+
+        // Пример использования компаротора в перечислении
+        enum EmployeeComparator {
+            ID(Comparator.comparingInt(Employee::getId)),
+            AGE(Comparator.comparingInt(Employee::getAge));
+            private Comparator<Employee> comparator;
+            EmployeeComparator(Comparator<Employee> comparator){
+                this.comparator = comparator;
+            }
+            public Comparator<Employee> getComparator() {
+                return comparator;
+            }
+        }
+
+        emps.stream().sorted(EmployeeComparator.ID.getComparator()).forEach(System.out::println);
+        System.out.println();
+        emps.stream().sorted(EmployeeComparator.AGE.getComparator()).forEach(System.out::println);
+        System.out.println();
+
+        // Пример с полной ассоциацией перечисления как компаротора
+        enum EmployeeComparatorEx implements Comparator<Employee>{
+            ID{
+                @Override
+                public int compare(Employee e1, Employee e2){
+                    return e2.getId() - e1.getId();
+                }
+            },
+            AGE{
+                @Override
+                public int compare(Employee e1, Employee e2){
+                    return e2.getAge() - e1.getAge();
+                }
+            }
+        }
+        emps.stream().sorted(EmployeeComparatorEx.ID).forEach(System.out::println);
+        System.out.println();
+        emps.stream().sorted(EmployeeComparatorEx.AGE).forEach(System.out::println);
+        System.out.println();
     }
 }

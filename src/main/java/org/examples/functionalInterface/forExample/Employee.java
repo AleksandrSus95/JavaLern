@@ -24,6 +24,7 @@ public class Employee {
                 " " + lastName + '\'' +
                 ", age=" + age +
                 ", position=" + position +
+                ", id=" + id +
                 '}';
     }
 
