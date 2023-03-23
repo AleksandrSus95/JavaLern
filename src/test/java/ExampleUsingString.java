@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-public class ExampleUSingString {
+public class ExampleUsingString {
     @Test
     public void exampleUsingStrings(){
         /*
