@@ -243,9 +243,11 @@ public class ExampleFunctionalInterface {
             ID(Comparator.comparingInt(Employee::getId)),
             AGE(Comparator.comparingInt(Employee::getAge));
             private Comparator<Employee> comparator;
-            EmployeeComparator(Comparator<Employee> comparator){
+
+            EmployeeComparator(Comparator<Employee> comparator) {
                 this.comparator = comparator;
             }
+
             public Comparator<Employee> getComparator() {
                 return comparator;
             }
@@ -257,16 +259,16 @@ public class ExampleFunctionalInterface {
         System.out.println();
 
         // Пример с полной ассоциацией перечисления как компаротора
-        enum EmployeeComparatorEx implements Comparator<Employee>{
-            ID{
+        enum EmployeeComparatorEx implements Comparator<Employee> {
+            ID {
                 @Override
-                public int compare(Employee e1, Employee e2){
+                public int compare(Employee e1, Employee e2) {
                     return e2.getId() - e1.getId();
                 }
             },
-            AGE{
+            AGE {
                 @Override
-                public int compare(Employee e1, Employee e2){
+                public int compare(Employee e1, Employee e2) {
                     return e2.getAge() - e1.getAge();
                 }
             }
@@ -275,5 +277,36 @@ public class ExampleFunctionalInterface {
         System.out.println();
         emps.stream().sorted(EmployeeComparatorEx.AGE).forEach(System.out::println);
         System.out.println();
+    }
+
+    @Test
+    @DisplayName("Замыкания")
+    @Description("Блок кода, представляющий собой лямбда-выражение вместе со значения-\n" +
+            "ми локальных переменных и параметров метода, в котором он объявлен, назы-\n" +
+            "вается замыканием")
+    public void exampleClosure() {
+        // Пример
+        /*
+        Замыкания не запрещают использования полей класса как статических, так
+        и нестатических.
+         */
+        class FunctionalBuilderEx1<T> {
+            public static Function<String, Integer> build(String strNum) {
+                int count = 1;// не явно в замыкании становится как final
+                return t -> Integer.valueOf(strNum + t) + count;
+            }
+        }
+        Function<String, Integer> function = FunctionalBuilderEx1.build("100");//Создаем функцию
+        System.out.println(function.apply("123"));
+        class FunctionalBuilderEx2<T> {
+            public static Function<String, Integer> build(String strNum) {
+                int[] count = {1};// не явно в замыкании становится как final, но т.к массив это объект его значение можно менять
+                return t -> Integer.valueOf(strNum + t) + ++count[0];
+            }
+        }
+        function = FunctionalBuilderEx2.build("100");//создаем функцию
+        System.out.println(function.apply("123"));
+        System.out.println(function.apply("123"));
+        System.out.println(function.apply("123"));
     }
 }
