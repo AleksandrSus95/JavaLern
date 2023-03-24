@@ -1,8 +1,11 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 public class ExampleUsingString {
     @Test
-    public void exampleUsingStrings(){
+    public void exampleUsingStrings() {
         /*
         Приколы со строками
         Строку можно создать 2мя способами
@@ -65,5 +68,27 @@ public class ExampleUsingString {
         System.out.println("Сравнение ссылок на эти объекты = " + (str1 == str2));//Результат false
         //Но если мы будем сравнивать значения методом equals то они будут эквивалентны
         System.out.println("Сравнение значения Объекта = " + str1.equals(str2));
+    }
+
+    @Test
+    public void exSortedString() {
+        // Сортировка строки
+        String names = " angelA Alena Agnes anette albina Anastasya ALLA ArinA ";
+        String[] nameArr = names.split(" ");
+        Arrays.stream(nameArr)
+                .filter(s -> !s.isEmpty())
+                .sorted(String::compareToIgnoreCase)
+                .forEach(System.out::println);
+
+        // Удаление пробелов
+        names.codePoints()
+                .filter(f -> f != ' ')
+                .forEach(f -> System.out.print((char) f));
+        // Пример использование StringJoiner
+        StringJoiner joiner = new StringJoiner(":", "<<", ">>");
+        for (String str:nameArr){
+            joiner.add(str);
+        }
+        System.out.println("\n" + joiner);
     }
 }
