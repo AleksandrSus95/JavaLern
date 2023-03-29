@@ -2,10 +2,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class IOStreamExample {
@@ -82,9 +85,9 @@ public class IOStreamExample {
 
     @Test
     @DisplayName("Пример работы с файловой системой")
-    public void exWorkFileSystem(){
+    public void exWorkFileSystem() {
         File file = new File("testDir" + File.separator + "info.txt");
-        if(file.exists() && file.isFile()){
+        if (file.exists() && file.isFile()) {
             System.out.println("Path: \t" + file.getPath());
             System.out.println("Absolute Path: \t" + file.getAbsolutePath());
             System.out.println("Size: \t" + file.length());
@@ -97,8 +100,8 @@ public class IOStreamExample {
             }
         }
         File dir = new File("testDir");
-        if(dir.exists() && dir.isDirectory()) {
-            for(File current : dir.listFiles()) {
+        if (dir.exists() && dir.isDirectory()) {
+            for (File current : dir.listFiles()) {
                 long millis = current.lastModified();
                 Instant date = Instant.ofEpochMilli(millis);
                 System.out.println(current.getPath() + "\t" + current.length() + "\t" + date);
@@ -107,5 +110,78 @@ public class IOStreamExample {
         File root = File.listRoots()[0];
         System.out.printf("\n%s %,d from %,d free bytes", root.getPath(), root.getUsableSpace(),
                 root.getTotalSpace());
+    }
+
+    @Test
+    @DisplayName("Чтение строки из файла")
+    public void readLineExample() {
+        StringBuilder stringLine = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader("testData/test.txt"))) {
+            String tmp;
+            while ((tmp = reader.readLine()) != null) {
+                stringLine.append(tmp).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Чтение из файла построково");
+        System.out.println(stringLine);
+
+        // Чтение всего файла появилось в Java 7
+        Path path = FileSystems.getDefault().getPath("testData", "test.txt");
+        try {
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+            System.out.println("Чтение всех строк за раз");
+            lines.forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Чтение файла в Stream
+        try (BufferedReader reader = new BufferedReader(new FileReader("testData/test.txt"));
+             Stream<String> stream = reader.lines();
+        ) {
+            String lines = stream.collect(Collectors.joining("\n"));
+            System.out.println("Чтение файла в поток");
+            System.out.println(lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Чтение из файла в Stream как Java 8
+        try (Stream<String> stream = Files.newBufferedReader(path).lines()) {
+            System.out.println("Чтение из файла в поток Java 8 style");
+            stream.forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @DisplayName("Пример записи в файл и переопределение стандартного потока")
+    public void exWriteInFile() {
+        String[] exString = {"test1", "test2", "test3", "test4"};
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("testData/newfile.txt")))) {
+            writer.println("Буфферизованный вывод в файл");
+            for (String str : exString) {
+                writer.println(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Передача потока ввода в файл
+        PrintStream defaultStream = System.out;
+        try (PrintStream stream = new PrintStream(new FileOutputStream("testData/newfile.txt"))) {
+            System.out.println("Здесь я пишу в консоль но в след строках будет запись в файл");
+            stream.println("Это первая строка записанная в файл");
+            for (String str : exString) {
+                stream.println(str);
+            }
+            System.setOut(stream);
+            System.out.println("Это тоже строка отправленная в файл");
+            System.out.println("После установки потока вместо консоли в файл получили это");
+            System.setOut(defaultStream);
+            System.out.println("Это уже должно уйти в консоль");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
