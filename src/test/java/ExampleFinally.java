@@ -2,7 +2,7 @@ import org.examples.exceptionReadme.ThrowableExample;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class FinallyExample {
+public class ExampleFinally {
     @Test
     @DisplayName("Example Using finally block")
     public void exampleFinally(){

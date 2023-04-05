@@ -1,4 +1,3 @@
-import org.examples.annotationClass.simpleExample.Base;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -6,11 +5,9 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.util.Base64;
-import java.util.stream.Stream;
 
-public class DecodeEncodeString {
+public class ExampleDecodeEncodeString {
 
     @Test
     @DisplayName("Пример шифрования строк")

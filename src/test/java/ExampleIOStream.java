@@ -7,11 +7,10 @@ import java.nio.file.*;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class IOStreamExample {
+public class ExampleIOStream {
     @Test
     @DisplayName("Пример ввода из файла")
     public void inputStreamExample() {

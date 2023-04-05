@@ -7,9 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.function.Supplier;
 
-public class DateFormatExample {
+public class ExampleDateFormat {
     @Test
     @DisplayName("Вывод даты во всез форматах")
     public void dataAllFormats(){

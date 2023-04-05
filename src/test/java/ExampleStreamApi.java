@@ -1,8 +1,5 @@
 import jdk.jfr.Description;
-import org.examples.collectionsAndStreamApiClass.forStreamApiClass.Department;
-import org.examples.collectionsAndStreamApiClass.forStreamApiClass.Employee;
-import org.examples.collectionsAndStreamApiClass.forStreamApiClass.Event;
-import org.examples.collectionsAndStreamApiClass.forStreamApiClass.Position;
+import org.examples.collectionsAndStreamApiClass.forStreamApiClass.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.*;
 
-public class StreamApiExample {
+public class ExampleStreamApi {
     private List<Employee> emps = List.of(
             new Employee("Michael", "Smith",   243,  43, Position.CHEF),
             new Employee("Jane",    "Smith",   523,  40, Position.MANAGER),
@@ -190,6 +187,79 @@ public class StreamApiExample {
     }
 
     @Test
+    @DisplayName("Алгоритмы сведения Collectors")
+    @Description("Примеры использования методов класса Collectors в StreamAPI")
+    public void exampleUsingCollectors(){
+        List<String> strings = List.of("as a the d on and".split("\\s+"));
+        // toCollection(Supplier<C> collectionFactory), toList(), toSet() — преобразо-
+        // вание в коллекцию;
+        List<Integer> listLengths = strings.stream()
+                .map(s -> s.length())
+                .collect(Collectors.toList());
+        System.out.println(listLengths);
+        // Пример с сылками на конструктор
+        List<Character> listFirstSymbol = strings.stream()
+                .map(s -> s.charAt(0))
+                .collect(Collectors.toCollection(ArrayList::new));
+        System.out.println(listFirstSymbol);
+        // joining(CharSequence delimiter) —обеспечивает конкатенацию строк с за-
+        // данным разделителем;
+        String results = strings.stream()
+                .map(String::toUpperCase)
+                .collect(Collectors.joining(":"));
+        System.out.println(results);
+        // mapping(Function<? super T,? extends U> mapper,Collector<? super U,A,R> downstream) -
+        // позволяет преобразовать элементы одного типа в элементы другого типа
+        List<Integer> listCode = strings.stream()
+                .collect(Collectors.mapping(s -> (int) s.charAt(0), Collectors.toList()));
+        System.out.println(listCode);
+        // Поиск максимального значения первых символов строки
+        int max = strings.stream()
+                .collect(Collectors.mapping(s -> (int) s.charAt(0),
+                        Collectors.maxBy(Integer::compareTo))).orElse(-1);
+        System.out.println(max);
+        // minBy(Comparator<? super T> c)/maxBy(Comparator<? super T> c) - коллектор для
+        // нахождения минимального или максимального элемента в потоке;
+        String minLex = strings.stream()
+                .collect(Collectors.minBy((s1, s2) -> s1.length() - s2.length()))
+                .orElse("none");
+        System.out.println(minLex);
+        // filtering(Predicate<? super T> predicate, Collector<? super T,A,R> downstream) -выполняет фильтрацию элементов;
+        List<String> list = strings.stream()
+                .collect(Collectors.filtering(s -> s.length() > 1, Collectors.toList()));
+        System.out.println(list);
+        // counting()—позволяет посчитать количество элементов потока;
+        long counter = strings.stream()
+                .collect(Collectors.counting());
+        System.out.println(counter);
+        // summingInt(ToIntFunction<? super T> mapper) - выполняет суммирование элементов.
+        // Существуют версии для Long и Double;
+        int length = strings.stream()
+                .collect(Collectors.summingInt(String::length));
+        System.out.println(length);
+        // averagingInt(ToIntFunction<? super T> mapper) - вычисляет среднее
+        // арифметическое элементов потока. Существуют версии для Long и Double;
+        Double averagingLength = strings.stream()
+                .collect(Collectors.averagingDouble(String::length));
+        System.out.println(averagingLength);
+        // reducing(T identity, BinaryOperator<T> op) — коллектор, осуществляющий редукцию (сведение) элементов
+        // на основании заданного бинарного оператора;
+        int sumCodeFirstChar = strings.stream()
+                .map(s -> (int) s.charAt(0))
+                .collect(Collectors.reducing(0, (a, b) -> a + b));
+        System.out.println(sumCodeFirstChar);
+        // reducing(U identity, Function<? super T,? extends U> mapper,BinaryOperator<U> op) - аналогичное предыдущему действие.
+        // groupingBy(Function<? super T, ? extends K> classifier)—коллектор группировки элементов потока
+        Map<Integer, List<String>> byLength = strings.stream()
+                .collect(Collectors.groupingBy(String::length));
+        System.out.println(byLength);
+        // partitioningBy(Predicate<? super T> predicate) - коллектор разбиения элементов потока;
+        Map<Boolean, List<String>> boolLength = strings.stream()
+                .collect(Collectors.partitioningBy(s -> s.length() < 2));
+        System.out.println(boolLength);
+    }
+
+    @Test
     @DisplayName("Пример использование stream API")
     @Description("Поиск, удаление, измененеие элемента")
     public void usingStreamApiExample(){
@@ -207,6 +277,32 @@ public class StreamApiExample {
                 })
                 .collect(Collectors.toList());
         employeeList.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("Пример работы с метасимволом ? в коллекциях")
+    public void exampleUsingMethaSymbolInCollections(){
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add( new Employee("Mark",    "Smith",   123,  41, Position.MANAGER));
+        employeeList.add( new Employee("Jane",    "Gagarin", 1423, 28, Position.MANAGER));
+        employeeList.add( new Employee("Sam",     "London",  1543, 52, Position.WORKER));
+        employeeList.add( new Employee("Jack",    "Jackson", 1534, 27, Position.WORKER));
+        employeeList.add( new Employee("Eric",    "Bosh",    1456, 32, Position.WORKER));
+        EmployeeAction action = new EmployeeAction() {
+            @Override
+            public void employeeRemove(List<? extends Employee> employees, int index) {
+                employees.remove(index);
+                // Удалить можем но добавить нет
+                // Compile Error
+                // employees.add(new Employee("Example",    "Example", 1234, 15, Position.WORKER));
+            }
+            @Override
+            public void employeeAdd(List<? super Employee> employees) {
+                employees.add(new Employee("Example",    "Example", 1234, 15, Position.WORKER));
+            }
+        };
+        action.employeeRemove(employeeList, 1);
+        action.employeeAdd(employeeList);
     }
 
     private void print(Stream<Employee> stream) {
