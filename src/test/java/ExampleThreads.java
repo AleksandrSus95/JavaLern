@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class ExampleThreads {
     @Test
@@ -66,5 +67,53 @@ public class ExampleThreads {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    @DisplayName("Пример работы механизма Fork/Join")
+    public void exampleForkJoin(){
+        class SumRecursiveTask extends RecursiveTask<Long> {
+            private List<Long> longList;
+            private int begin;
+            private int end;
+            public static final long THRESHOLD = 10_000;
+            private SumRecursiveTask(List<Long> longList, int begin, int end){
+                this.longList = longList;
+                this.begin = begin;
+                this.end = end;
+            }
+
+            public SumRecursiveTask(List<Long> longList){
+                this(longList, 0, longList.size());
+            }
+
+            @Override
+            protected Long compute() {
+                int length = end - begin;
+                long result = 0;
+                if(length <= THRESHOLD){
+                    for (int i = begin; i < end; i++){
+                        result += longList.get(i);
+                    }
+                }else {
+                    int middle = begin + length / 2;
+                    SumRecursiveTask taskLeft = new SumRecursiveTask(longList, begin, middle);
+                    taskLeft.fork();// Асинхронный запуск
+                    SumRecursiveTask taskRight = new SumRecursiveTask(longList, middle, end);
+                    taskRight.fork();
+                    Long leftSum = taskLeft.join();
+                    Long rightSum = taskRight.join();
+                    result = leftSum + rightSum;
+                }
+                return result;
+            }
+        }
+        int end = 1_000_000;
+        List<Long> numbers = LongStream.range(0, end)
+                .boxed()
+                .toList();
+        ForkJoinTask<Long> task = new SumRecursiveTask(numbers);
+        long result = new ForkJoinPool().invoke(task);
+        System.out.println(result);
     }
 }
