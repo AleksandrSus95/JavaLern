@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -115,5 +114,41 @@ public class ExampleThreads {
         ForkJoinTask<Long> task = new SumRecursiveTask(numbers);
         long result = new ForkJoinPool().invoke(task);
         System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("Параллелизм")
+    public void exampleParallelism(){
+        long result;
+        result = LongStream.range(0, 1_000_000_000)
+                .boxed()
+                .parallel()
+                .map(x -> x / 7)
+                .peek(v -> System.out.println(Thread.currentThread().getName()))//будет выводить имена потоков
+                .reduce((x,y) -> x + (int)(3*Math.sin(y)))
+                .get();
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("Параллелизм")
+    @Description("Обертка неявного параллелизма в ForkJoinPool")
+    public void exampleParallelismInForkJoinPool(){
+        long sec = System.currentTimeMillis();
+        Callable<Integer> task = () -> IntStream.range(0, 1_000_000_000)
+                .boxed()
+                .parallel()
+                .map(x -> x /3)
+                .peek(th -> System.out.println(Thread.currentThread().getName()))
+                .reduce((x,y) -> x + (int)(3*Math.sin(y)))
+                .get();
+        ForkJoinPool pool = new ForkJoinPool(8); //8 processors
+        try {
+            int result = pool.submit(task).get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println((System.currentTimeMillis() - sec) / 1000);
     }
 }
