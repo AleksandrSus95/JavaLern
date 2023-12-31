@@ -1,6 +1,8 @@
 package org.examples.threadClass;
 
 public class WalkThread extends Thread{
+
+    @Override
     public void run(){
         try {
             for(int i = 0; i< 10; i++){
