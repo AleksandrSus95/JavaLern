@@ -10,6 +10,11 @@ import java.util.Locale;
 
 public class ExampleDateFormat {
     @Test
+    public void simpleOut() {
+        System.out.println("simple out test");
+
+    }
+    @Test
     @DisplayName("Вывод даты во всез форматах")
     public void dataAllFormats(){
         Date date = new Date();
