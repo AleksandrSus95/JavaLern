@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+#      POSTGRES_DB: "book" - закоментил так как будем создавать базу из файла sql
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "testpassword"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -U testuser -d postgres
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - postgres-example:/var/lib/postgresql/data
+      - ./studyPsqlDay1.sql:/docker-entrypoint-initdb.d/studyPsqlDay1.sql
+    restart: unless-stopped
+#  psql -a -f /docker-entrypoint-initdb.d/studyPsqlDay1.sql -U testuser -d postgres - команда чтобы выполить скрипт
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:8.1
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@mail.ru"
+      PGADMIN_DEFAULT_PASSWORD: "SuperSecret"
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-example:/var/lib/pgadmin
+
+volumes:
+  postgres-example:
+  pgadmin-example:
