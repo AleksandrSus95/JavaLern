@@ -31,8 +31,9 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 DROP EXTENSION IF EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA pg_catalog;
 
-SET search_path = studysql, pg_catalog;
+SET search_path = studysql, pg_catalog; -- Говорит что подефолту искать в схеме studysql
 
+-- Создадим процедуру lang()
 CREATE FUNCTION lang() RETURNS text
     LANGUAGE plpgsql STABLE
     AS $$
@@ -44,6 +45,7 @@ EXCEPTION
 END;
 $$;
 
+-- Создадим процедуру now()
 CREATE FUNCTION now() RETURNS timestamp with time zone
     LANGUAGE sql IMMUTABLE
     AS $$SELECT '2024-01-01 19:00:00'::TIMESTAMP AT TIME ZONE 'Europe/Samara';

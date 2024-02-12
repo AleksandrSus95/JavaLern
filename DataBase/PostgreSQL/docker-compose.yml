@@ -18,6 +18,8 @@ services:
     volumes:
       - postgres-example:/var/lib/postgresql/data
       - ./studyPsqlDay1.sql:/docker-entrypoint-initdb.d/studyPsqlDay1.sql
+      - ./studyPsqlDay2_1.sql:/docker-entrypoint-initdb.d/studyPsqlDay2_1.sql
+      - ./studyPsqlDay2_2.sql:/docker-entrypoint-initdb.d/studyPsqlDay2_2.sql
     restart: unless-stopped
 #  psql -a -f /docker-entrypoint-initdb.d/studyPsqlDay1.sql -U testuser -d postgres - команда чтобы выполить скрипт
 
