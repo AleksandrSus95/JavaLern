@@ -1,7 +1,5 @@
 package org.examples.threadClass;
 
-import java.util.function.Supplier;
-
 public class TalkThread implements Runnable{
     @Override
     public void run() {
