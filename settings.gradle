@@ -1,0 +1,4 @@
+rootProject.name = 'JavaLern'
+include 'JavaLernBase'
+include 'SimpleResApiSeervice'
+
