@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly Deps.lombok
+    annotationProcessor Deps.lombok
+    testImplementation Deps.junitApi
+    testImplementation Deps.junitParams
+    testRuntimeOnly Deps.junitEngine
+    testImplementation Deps.slf4jSimple
+    testImplementation Deps.assertj
+    implementation Deps.jacksonCore
+    implementation Deps.jacksonDataBind
+    implementation Deps.hibernateCore
+    implementation Deps.hibernateEntity
+    implementation Deps.postgresql
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

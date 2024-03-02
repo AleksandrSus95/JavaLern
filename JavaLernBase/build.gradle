@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation Deps.junitApi
+    testImplementation Deps.junitParams
+    testRuntimeOnly Deps.junitEngine
+    testImplementation Deps.slf4jSimple
+    testImplementation Deps.assertj
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

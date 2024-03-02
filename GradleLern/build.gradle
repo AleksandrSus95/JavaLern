@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation Deps.junitApi
+    testImplementation Deps.junitParams
+    testRuntimeOnly Deps.junitEngine
+    testImplementation Deps.slf4jSimple
+    testImplementation Deps.assertj
+}
+
+apply plugin: ExamplePlugin
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+tasks.register('helloTask', HelloWorldTask)
+
+tasks.register('helloBuildSrc') {
+    doLast {
+        HelloWorldBuldSrc.sayHello()
+    }
+}
