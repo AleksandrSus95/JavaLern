@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import org.examples.stepickTask.Main;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

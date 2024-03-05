@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import org.examples.annotationClass.example.AccountManager;
 import org.examples.annotationClass.example.AccountManagerImpl;
 import org.examples.annotationClass.example.SecurityFactory;

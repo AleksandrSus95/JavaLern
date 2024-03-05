@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import jdk.jfr.Description;
 import org.examples.collectionsAndStreamApiClass.forStreamApiClass.*;
 import org.junit.jupiter.api.DisplayName;
