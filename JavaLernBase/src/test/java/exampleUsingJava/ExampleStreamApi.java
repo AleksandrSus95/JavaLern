@@ -193,8 +193,7 @@ public class ExampleStreamApi {
     @Description("Примеры использования методов класса Collectors в StreamAPI")
     public void exampleUsingCollectors(){
         List<String> strings = List.of("as a the d on and".split("\\s+"));
-        // toCollection(Supplier<C> collectionFactory), toList(), toSet() — преобразо-
-        // вание в коллекцию;
+        // toCollection(Supplier<C> collectionFactory), toList(), toSet() — преобразование в коллекцию;
         List<Integer> listLengths = strings.stream()
                 .map(s -> s.length())
                 .collect(Collectors.toList());
@@ -204,8 +203,7 @@ public class ExampleStreamApi {
                 .map(s -> s.charAt(0))
                 .collect(Collectors.toCollection(ArrayList::new));
         System.out.println(listFirstSymbol);
-        // joining(CharSequence delimiter) —обеспечивает конкатенацию строк с за-
-        // данным разделителем;
+        // joining(CharSequence delimiter) —обеспечивает конкатенацию строк с заданным разделителем;
         String results = strings.stream()
                 .map(String::toUpperCase)
                 .collect(Collectors.joining(":"));
@@ -308,8 +306,7 @@ public class ExampleStreamApi {
     }
 
     private void print(Stream<Employee> stream) {
-        stream
-                .map(emp -> String.format(
+        stream.map(emp -> String.format(
                         "%4d | %-15s %-10s age %s %s",
                         emp.getId(),
                         emp.getLastName(),
@@ -318,7 +315,6 @@ public class ExampleStreamApi {
                         emp.getPosition()
                 ))
                 .forEach(System.out::println);
-
         System.out.println();
     }
 
