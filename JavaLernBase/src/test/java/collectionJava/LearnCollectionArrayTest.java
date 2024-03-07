@@ -51,7 +51,7 @@ public class LearnCollectionArrayTest {
         System.out.println(list1);
         System.out.println(list1.indexOf("Misha")); // Поиск индекса элемента, он так же покажет первый найденный элемент
         System.out.println(list1.contains("Marina")); // Проверит содержит ли список указанный элемент, будет использовать для сравнения equals
-        list1.containsAll(list2); // Проверит содержит ли список все элементы переданной в метод коллекции
+        System.out.println(list1.containsAll(list2)); // Проверит содержит ли список все элементы переданной в метод коллекции
         list1.lastIndexOf("Object"); // Поиск индекса элемента, найден элемент по последнему совпадению
         list1.clear(); // Опустошит список
         list1.isEmpty(); // Покажет пуст ли наш список (фолсе если не пуст, труе если пустой)
