@@ -2,13 +2,16 @@ package collectionJava;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public class BinarySearchTest {
     @Test
     public void binarySearchExample() {
         /*
-        Бинару серч использует метод компаратора, для корректного поиска надо чтобы был реализован в классе
+        Бинари серч использует метод компаратора, для корректного поиска надо чтобы был реализован в классе
         искаомых объектов компаратор, так же перед использованием бинарного поиска массив должен быть отсоритрован
         Например если мы ищем по UUID среди объектов например Users то компаратор должен быть реализован по UUID и
         массив должен быть отсориторован по UUID.
