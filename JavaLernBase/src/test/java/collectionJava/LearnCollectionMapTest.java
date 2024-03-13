@@ -1,8 +1,10 @@
 package collectionJava;
 
+import org.examples.innerClass.Student;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -77,6 +79,11 @@ public class LearnCollectionMapTest {
         // Это происходит как раз изза того что у нас в этом классе переопределен метод хэшкод
         // Вообще чтобы корректно работала коллекция hashCode должны быть переопределены оба метода как equals так и hashCode
         // Внутри HashMap при поиске пользуется обоими этими методи ищет сначала по хэшкоду и потом проверят по эквивалентности
+
+        // Пример использования Entry
+        for (Map.Entry<StudentWithCorrectHash, Double> entry: correct.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
     }
 
     class StudentWithoutHash{
