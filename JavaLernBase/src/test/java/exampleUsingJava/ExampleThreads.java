@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import jdk.jfr.Description;
 import org.examples.threadClass.TalkThread;
 import org.examples.threadClass.WalkThread;

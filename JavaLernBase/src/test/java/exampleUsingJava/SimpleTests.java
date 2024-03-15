@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import jdk.jfr.Description;
 import org.examples.abstactClass.AbstractQuest;
 import org.examples.abstactClass.TestAction;

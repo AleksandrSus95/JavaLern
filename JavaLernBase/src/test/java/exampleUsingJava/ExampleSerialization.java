@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import org.examples.serialixationClass.StudentSerialization;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

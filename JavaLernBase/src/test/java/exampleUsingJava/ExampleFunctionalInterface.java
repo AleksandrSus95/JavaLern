@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import jdk.jfr.Description;
 import org.examples.functionalInterface.DefaultAndStatic;
 import org.examples.functionalInterface.MyFunctionalInterface;

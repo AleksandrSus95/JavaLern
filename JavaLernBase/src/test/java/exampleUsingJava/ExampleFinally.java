@@ -1,3 +1,5 @@
+package exampleUsingJava;
+
 import org.examples.exceptionReadme.ThrowableExample;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
