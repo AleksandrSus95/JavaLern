@@ -3,14 +3,15 @@ package org.examples.cloningClass;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CloningClass implements Cloneable{
+public class CloningClass implements Cloneable {
     private long id;
     private String name;
     private ArrayList<Short> list = new ArrayList<>();
-    public CloningClass(int id, String name){
+
+    public CloningClass(int id, String name) {
         this.id = id;
         this.name = name;
-        for(short i = 0; i < 10; i++){
+        for (short i = 0; i < 10; i++) {
             list.add(Short.valueOf(i));
         }
     }
@@ -30,7 +31,7 @@ public class CloningClass implements Cloneable{
     @Override
     public String toString() {
         String list = new String();
-        for(short i:this.list){
+        for (short i : this.list) {
             list += String.valueOf(i);
         }
         return CloningClass.class.getName() +
@@ -54,7 +55,7 @@ public class CloningClass implements Cloneable{
     }
 
     @Override
-    public CloningClass clone(){
+    public CloningClass clone() {
         CloningClass testClone = null;
         try {
             testClone = (CloningClass) super.clone();

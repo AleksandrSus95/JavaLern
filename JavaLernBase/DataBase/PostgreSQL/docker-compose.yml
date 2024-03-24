@@ -4,7 +4,7 @@ services:
     container_name: postgres_container
     image: postgres
     environment:
-#      POSTGRES_DB: "book" - закоментил так как будем создавать базу из файла sql
+      POSTGRES_DB: "book"
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
       PGDATA: "/var/lib/postgresql/data/pgdata"

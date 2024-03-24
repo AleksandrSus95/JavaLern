@@ -2,4 +2,5 @@ rootProject.name = 'JavaLern'
 include 'JavaLernBase'
 include 'SimpleResApiService'
 include 'GradleLern'
+include 'exampleKafka'
 
